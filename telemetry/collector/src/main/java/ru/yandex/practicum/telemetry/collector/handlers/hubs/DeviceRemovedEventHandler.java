@@ -3,12 +3,9 @@ package ru.yandex.practicum.telemetry.collector.handlers.hubs;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.grpc.telemetry.event.DeviceAddedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceRemovedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
-import ru.yandex.practicum.kafka.telemetry.event.DeviceAddedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceRemovedEventAvro;
-import ru.yandex.practicum.kafka.telemetry.event.DeviceTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.telemetry.collector.kafka.KafkaClientProducer;
 import ru.yandex.practicum.telemetry.collector.mappers.TimestampMapper;
@@ -16,7 +13,7 @@ import ru.yandex.practicum.telemetry.collector.mappers.TimestampMapper;
 @Component
 @RequiredArgsConstructor
 public class DeviceRemovedEventHandler implements HubEventHandler {
-    final String topic = "telemetry.hubs.v1";
+    private final String topic = "telemetry.hubs.v1";
     private final KafkaClientProducer kafkaClientProducer;
 
     @Override

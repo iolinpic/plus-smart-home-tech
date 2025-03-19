@@ -13,7 +13,7 @@ import ru.yandex.practicum.telemetry.collector.mappers.TimestampMapper;
 @Component
 @RequiredArgsConstructor
 public class ClimateSensorEventHandler implements SensorEventHandler {
-    final String topic = "telemetry.sensors.v1";
+    private final String topic = "telemetry.sensors.v1";
     private final KafkaClientProducer kafkaClientProducer;
 
     @Override

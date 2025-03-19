@@ -14,7 +14,7 @@ import ru.yandex.practicum.telemetry.collector.mappers.TimestampMapper;
 @Component
 @RequiredArgsConstructor
 public class DeviceAddedEventHandler implements HubEventHandler {
-    final String topic = "telemetry.hubs.v1";
+    private final String topic = "telemetry.hubs.v1";
     private final KafkaClientProducer kafkaClientProducer;
 
     @Override

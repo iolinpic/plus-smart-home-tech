@@ -3,10 +3,8 @@ package ru.yandex.practicum.telemetry.collector.handlers.sensors;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.grpc.telemetry.event.LightSensorProto;
 import ru.yandex.practicum.grpc.telemetry.event.MotionSensorProto;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
 import ru.yandex.practicum.kafka.telemetry.event.MotionSensorAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.collector.kafka.KafkaClientProducer;
@@ -14,9 +12,10 @@ import ru.yandex.practicum.telemetry.collector.mappers.TimestampMapper;
 
 @Component
 @RequiredArgsConstructor
-public class MotionSensorEventHandler implements SensorEventHandler{
-    final String topic = "telemetry.sensors.v1";
+public class MotionSensorEventHandler implements SensorEventHandler {
+    private final String topic = "telemetry.sensors.v1";
     private final KafkaClientProducer kafkaClientProducer;
+
     @Override
     public SensorEventProto.PayloadCase getMessageType() {
         return SensorEventProto.PayloadCase.MOTION_SENSOR_EVENT;
