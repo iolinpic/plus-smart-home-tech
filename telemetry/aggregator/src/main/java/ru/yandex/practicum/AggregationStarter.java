@@ -52,13 +52,7 @@ public class AggregationStarter {
                     Optional<SensorsSnapshotAvro> sensorsSnapshotAvroOpt = updateState(record.value());
                     if (sensorsSnapshotAvroOpt.isPresent()) {
                         SensorsSnapshotAvro snapshotAvro = sensorsSnapshotAvroOpt.get();
-                        ProducerRecord<String, SpecificRecordBase> producerRecord =
-                                new ProducerRecord<>(SNAPSHOT_TOPIC,
-                                        null,
-                                        snapshotAvro.getTimestamp().getEpochSecond(),
-                                        null,
-                                        snapshotAvro);
-                        producer.send(producerRecord);
+                        producer.send(new ProducerRecord<>(SNAPSHOT_TOPIC, snapshotAvro));
                         log.info("Snapshot from hub ID = {} send to topic: {}", snapshotAvro.getHubId(),
                                 SNAPSHOT_TOPIC);
                     }
@@ -155,6 +149,6 @@ public class AggregationStarter {
 
     private boolean isDataNotChanged(SensorStateAvro oldState, SensorEventAvro event) {
         return (oldState.getTimestamp().isAfter(event.getTimestamp())) ||
-                (oldState.getData() == event.getPayload());
+                (oldState.getData().equals(event.getPayload()));
     }
 }
