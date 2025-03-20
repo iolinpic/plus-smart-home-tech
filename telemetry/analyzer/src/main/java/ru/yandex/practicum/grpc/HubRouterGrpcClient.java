@@ -15,8 +15,7 @@ public class HubRouterGrpcClient {
         this.hubRouterClient = hubRouterClient;
     }
 
-    public void sendData(DeviceActionRequest deviceActionRequest){
+    public void sendData(DeviceActionRequest deviceActionRequest) {
         hubRouterClient.handleDeviceAction(deviceActionRequest);
     }
-
 }
