@@ -1,5 +1,6 @@
 package ru.yandex.practicum.processor;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -22,18 +23,14 @@ import java.util.Properties;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class HubEventProcessor implements Runnable {
     private static final List<String> TOPICS = List.of("telemetry.hubs.v1");
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
 
     private final HubEventHandler handler;
-    private final KafkaConsumer<String, HubEventAvro> consumer;
-
-    public HubEventProcessor(HubEventHandler handler) {
-        consumer = new KafkaConsumer<>(getConsumerProperties());
-        this.handler = handler;
-    }
+    private final KafkaConsumer<String, HubEventAvro> consumer = new KafkaConsumer<>(getConsumerProperties());
 
     @Override
     public void run() {
@@ -46,7 +43,7 @@ public class HubEventProcessor implements Runnable {
                     HubEventAvro hubEventAvro = record.value();
                     log.info("Received hubEvent from hub ID = {}", hubEventAvro.getHubId());
                     handler.handle(hubEventAvro);
-                    manageOffsets(record, consumer);
+                    manageOffsets(record);
                 }
             }
         } catch (WakeupException ignored) {
@@ -63,9 +60,6 @@ public class HubEventProcessor implements Runnable {
         }
     }
 
-    public void stop() {
-        consumer.wakeup();
-    }
 
     private static Properties getConsumerProperties() {
         Properties properties = new Properties();
@@ -77,8 +71,7 @@ public class HubEventProcessor implements Runnable {
         return properties;
     }
 
-    private static void manageOffsets(ConsumerRecord<String, HubEventAvro> record,
-                                      KafkaConsumer<String, HubEventAvro> consumer) {
+    private static void manageOffsets(ConsumerRecord<String, HubEventAvro> record) {
         currentOffsets.put(
                 new TopicPartition(record.topic(), record.partition()),
                 new OffsetAndMetadata(record.offset() + 1)

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.processor;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -21,19 +22,16 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class SnapshotProcessor {
     private static final List<String> TOPICS = List.of("telemetry.snapshots.v1");
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
 
-    private final KafkaConsumer<String, SensorsSnapshotAvro> consumer;
+    private final KafkaConsumer<String, SensorsSnapshotAvro> consumer= new KafkaConsumer<>(getConsumerProperties());
     private final SnapshotHandler handler;
 
-    public SnapshotProcessor(SnapshotHandler handler) {
-        consumer = new KafkaConsumer<>(getConsumerProperties());
-        this.handler = handler;
-    }
 
     public void start() {
         try {
@@ -46,7 +44,7 @@ public class SnapshotProcessor {
                     SensorsSnapshotAvro sensorsSnapshotAvro = record.value();
                     log.info("Received snapshot from hub ID = {}", sensorsSnapshotAvro.getHubId());
                     handler.handle(sensorsSnapshotAvro);
-                    manageOffsets(record, consumer);
+                    manageOffsets(record);
                 }
             }
         } catch (WakeupException ignored) {
@@ -63,10 +61,6 @@ public class SnapshotProcessor {
         }
     }
 
-    public void stop() {
-        consumer.wakeup();
-    }
-
     private static Properties getConsumerProperties() {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "snapshotConsumer");
@@ -77,8 +71,7 @@ public class SnapshotProcessor {
         return properties;
     }
 
-    private static void manageOffsets(ConsumerRecord<String, SensorsSnapshotAvro> record,
-                                      KafkaConsumer<String, SensorsSnapshotAvro> consumer) {
+    private static void manageOffsets(ConsumerRecord<String, SensorsSnapshotAvro> record) {
         currentOffsets.put(
                 new TopicPartition(record.topic(), record.partition()),
                 new OffsetAndMetadata(record.offset() + 1)
