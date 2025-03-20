@@ -35,6 +35,7 @@ public class HubEventProcessor implements Runnable {
     @Override
     public void run() {
         try {
+            Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
             consumer.subscribe(TOPICS);
 
             while (true) {
