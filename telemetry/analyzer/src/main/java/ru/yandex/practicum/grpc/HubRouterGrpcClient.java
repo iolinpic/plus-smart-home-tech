@@ -8,8 +8,11 @@ import ru.yandex.practicum.grpc.telemetry.hubRouter.HubRouterControllerGrpc;
 
 @Service
 public class HubRouterGrpcClient {
-    @GrpcClient("hub-router")
-    private HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouterClient;
+    private final HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouterClient;
+
+    public HubRouterGrpcClient(@GrpcClient("hub-router") HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouterClient) {
+        this.hubRouterClient = hubRouterClient;
+    }
 
     public void sendData(DeviceActionRequest deviceActionRequest) {
         hubRouterClient.handleDeviceAction(deviceActionRequest);
