@@ -14,7 +14,7 @@ import ru.yandex.practicum.dto.SetProductQuantityStateRequest;
 import java.util.Collection;
 import java.util.UUID;
 
-@FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
+@FeignClient(name = "shopping-store")
 public interface ShoppingStoreOperations {
 
     @PutMapping

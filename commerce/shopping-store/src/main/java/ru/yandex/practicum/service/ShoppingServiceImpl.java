@@ -15,6 +15,7 @@ import ru.yandex.practicum.model.Product;
 import ru.yandex.practicum.repository.ShoppingStoreRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -62,8 +63,8 @@ public class ShoppingServiceImpl implements ShoppingService {
     public Collection<ProductDto> searchProducts(String category, Pageable params) {
         Sort sort = Sort.by(params.getSort().stream().map(Sort.Order::asc).toList());
         PageRequest pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
-        Collection<Product> products = productRepository.getProductsByProductCategory(ProductCategory.valueOf(category), pageable);
-        return productMapper.mapToListProductDto(products.stream().toList());
+        List<Product> products = productRepository.getProductsByProductCategory(ProductCategory.valueOf(category), pageable);
+        return productMapper.mapToListProductDto(products);
     }
 
     private Product getProductFromStore(UUID productId) {

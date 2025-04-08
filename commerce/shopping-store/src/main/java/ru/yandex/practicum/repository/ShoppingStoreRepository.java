@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.yandex.practicum.dto.ProductCategory;
 import ru.yandex.practicum.model.Product;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface ShoppingStoreRepository extends JpaRepository<Product, UUID> {
-    Collection<Product> getProductsByProductCategory(ProductCategory productCategory, Pageable pageable);
+    List<Product> getProductsByProductCategory(ProductCategory productCategory, Pageable pageable);
 }
