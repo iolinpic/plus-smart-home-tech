@@ -11,6 +11,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.VoidDeserializer;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.config.AnalyzerConfig;
 import ru.yandex.practicum.handler.HubEventHandler;
 import ru.yandex.practicum.kafka.serializer.HubEventDeserializer;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
@@ -25,21 +26,20 @@ import java.util.Properties;
 @Component
 @RequiredArgsConstructor
 public class HubEventProcessor implements Runnable {
-    private static final List<String> TOPICS = List.of("telemetry.hubs.v1");
     private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
-    private static final Duration CONSUME_ATTEMPT_TIMEOUT = Duration.ofMillis(1000);
 
     private final HubEventHandler handler;
-    private final KafkaConsumer<String, HubEventAvro> consumer = new KafkaConsumer<>(getConsumerProperties());
+    private final AnalyzerConfig config;
+    private final KafkaConsumer<String, HubEventAvro> consumer;
 
     @Override
     public void run() {
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(consumer::wakeup));
-            consumer.subscribe(TOPICS);
+            consumer.subscribe(config.getHubTopics());
 
             while (true) {
-                ConsumerRecords<String, HubEventAvro> records = consumer.poll(CONSUME_ATTEMPT_TIMEOUT);
+                ConsumerRecords<String, HubEventAvro> records = consumer.poll(config.getHubConsumeAttemptTimeout());
                 for (ConsumerRecord<String, HubEventAvro> record : records) {
                     HubEventAvro hubEventAvro = record.value();
                     log.info("Received hubEvent from hub ID = {}", hubEventAvro.getHubId());
