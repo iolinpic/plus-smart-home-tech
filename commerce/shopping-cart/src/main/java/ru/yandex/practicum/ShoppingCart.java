@@ -10,8 +10,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @ConfigurationPropertiesScan
 @EnableFeignClients
 @EnableDiscoveryClient
-public class Warehouse {
+public class ShoppingCart {
     public static void main(String[] args) {
-        SpringApplication.run(Warehouse.class, args);
+        SpringApplication.run(ShoppingCart.class, args);
     }
 }
