@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS cart (
-    shopping_cart_id UUID PRIMARY KEY,
+    shopping_cart_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR,
     state VARCHAR
 );
