@@ -15,6 +15,5 @@ public class SetProductQuantityStateRequest {
     @NotNull
     UUID productId;
 
-    @NotNull
     QuantityState quantityState;
 }

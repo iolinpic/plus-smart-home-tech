@@ -1,6 +1,8 @@
 package ru.yandex.practicum.service;
 
-import org.springframework.data.domain.Pageable;
+
+import ru.yandex.practicum.dto.Pageable;
+import ru.yandex.practicum.dto.ProductCategory;
 import ru.yandex.practicum.dto.ProductDto;
 import ru.yandex.practicum.dto.SetProductQuantityStateRequest;
 
@@ -18,5 +20,5 @@ public interface ShoppingService {
 
     void setProductQuantityState(SetProductQuantityStateRequest request);
 
-    Collection<ProductDto> searchProducts(String category, Pageable params);
+    Collection<ProductDto> searchProducts(ProductCategory category, Pageable params);
 }

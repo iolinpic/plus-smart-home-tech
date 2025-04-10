@@ -33,7 +33,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         oldProducts.putAll(products);
         shoppingCart.setProducts(oldProducts);
         ShoppingCartDto cartDto = shoppingCartMapper.mapToShoppingCartDto(shoppingCart);
-        warehouseClient.checkShoppingCart(cartDto);
+        try {
+            warehouseClient.checkShoppingCart(cartDto);
+        } catch (Exception e) {
+            // warehhouse fail cheking
+        }
         shoppingCartRepository.save(shoppingCart);
         return cartDto;
     }
@@ -76,7 +80,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartProducts.put(request.getProductId(), request.getNewQuantity());
         shoppingCart.setProducts(cartProducts);
         ShoppingCartDto cartDto = shoppingCartMapper.mapToShoppingCartDto(shoppingCart);
-        warehouseClient.checkShoppingCart(cartDto);
+        try {
+            warehouseClient.checkShoppingCart(cartDto);
+        } catch (Exception e) {
+            // warehhouse fail cheking
+        }
         shoppingCartRepository.save(shoppingCart);
         return cartDto;
     }

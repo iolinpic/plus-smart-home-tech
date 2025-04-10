@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.data.domain.Pageable;
-
+import ru.yandex.practicum.dto.Pageable;
+import ru.yandex.practicum.dto.ProductCategory;
 import ru.yandex.practicum.dto.ProductDto;
 import ru.yandex.practicum.dto.SetProductQuantityStateRequest;
 
@@ -21,6 +21,9 @@ public interface ShoppingStoreOperations {
     @PutMapping
     ProductDto addProduct(@Valid @RequestBody ProductDto product);
 
+    @GetMapping
+    Collection<ProductDto> searchProducts(@PathVariable String category, @PathVariable Pageable params);
+
     @GetMapping("/{productId}")
     ProductDto getProductById(@PathVariable UUID productId);
 
@@ -30,8 +33,6 @@ public interface ShoppingStoreOperations {
     @PostMapping("/removeProductFromStore")
     boolean removeProduct(@RequestBody UUID productId);
 
-    @GetMapping
-    Collection<ProductDto> searchProducts(@PathVariable String category, Pageable params);
 
     @PostMapping("/quantityState")
     boolean updateProductQuantity(@Valid @RequestBody SetProductQuantityStateRequest request);

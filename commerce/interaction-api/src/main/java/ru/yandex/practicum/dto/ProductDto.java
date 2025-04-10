@@ -24,10 +24,8 @@ public class ProductDto {
 
     private String imageSrc;
 
-    @NotNull
     private QuantityState quantityState;
 
-    @NotNull
     private ProductState productState;
 
     private Double rating;
