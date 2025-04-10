@@ -19,21 +19,21 @@ public class WarehouseController implements WarehouseOperations {
 
     @Override
     public void addProductToWarehouse(NewProductInWarehouseRequest request) {
-
+        warehouseService.addNewProductToWarehouse(request);
     }
 
     @Override
     public BookedProductsDto checkShoppingCart(ShoppingCartDto shoppingCartDto) {
-        return null;
+        return warehouseService.checkShoppingCart(shoppingCartDto);
     }
 
     @Override
     public void increaseProductQuantity(AddProductToWarehouseRequest request) {
-
+        warehouseService.increaseProductQuantity(request);
     }
 
     @Override
     public AddressDto getWarehouseAddress() {
-        return null;
+        return warehouseService.getWarehouseAddress();
     }
 }
