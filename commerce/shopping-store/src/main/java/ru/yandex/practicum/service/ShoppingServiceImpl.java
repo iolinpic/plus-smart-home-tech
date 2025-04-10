@@ -2,11 +2,9 @@ package ru.yandex.practicum.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.dto.Pageable;
 import ru.yandex.practicum.dto.ProductCategory;
 import ru.yandex.practicum.dto.ProductDto;
 import ru.yandex.practicum.dto.ProductState;
@@ -69,9 +67,8 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Override
     @Transactional(readOnly = true)
     public Collection<ProductDto> searchProducts(String category, Pageable params) {
-        Sort sort = Sort.by(params.getSort().stream().map(Sort.Order::asc).toList());
-        PageRequest pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
-        List<Product> products = productRepository.getProductsByProductCategory(ProductCategory.valueOf(category), pageable);
+
+        List<Product> products = productRepository.getProductsByProductCategory(ProductCategory.valueOf(category), params);
         return productMapper.mapToListProductDto(products);
     }
 
