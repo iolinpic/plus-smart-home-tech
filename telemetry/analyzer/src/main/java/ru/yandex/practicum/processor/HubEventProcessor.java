@@ -16,9 +16,7 @@ import ru.yandex.practicum.handler.HubEventHandler;
 import ru.yandex.practicum.kafka.serializer.HubEventDeserializer;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 
-import java.time.Duration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,6 +29,23 @@ public class HubEventProcessor implements Runnable {
     private final HubEventHandler handler;
     private final AnalyzerConfig config;
     private final KafkaConsumer<String, HubEventAvro> consumer;
+
+    private static Properties getConsumerProperties() {
+        Properties properties = new Properties();
+        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "hubConsumer");
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "hub.analyzing");
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, VoidDeserializer.class);
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, HubEventDeserializer.class);
+        return properties;
+    }
+
+    private static void manageOffsets(ConsumerRecord<String, HubEventAvro> record) {
+        currentOffsets.put(
+                new TopicPartition(record.topic(), record.partition()),
+                new OffsetAndMetadata(record.offset() + 1)
+        );
+    }
 
     @Override
     public void run() {
@@ -59,23 +74,5 @@ public class HubEventProcessor implements Runnable {
                 log.info("Consumer closed");
             }
         }
-    }
-
-
-    private static Properties getConsumerProperties() {
-        Properties properties = new Properties();
-        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "hubConsumer");
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "hub.analyzing");
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, VoidDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, HubEventDeserializer.class);
-        return properties;
-    }
-
-    private static void manageOffsets(ConsumerRecord<String, HubEventAvro> record) {
-        currentOffsets.put(
-                new TopicPartition(record.topic(), record.partition()),
-                new OffsetAndMetadata(record.offset() + 1)
-        );
     }
 }

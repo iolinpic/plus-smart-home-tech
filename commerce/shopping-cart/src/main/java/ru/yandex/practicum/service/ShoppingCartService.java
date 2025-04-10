@@ -1,6 +1,5 @@
 package ru.yandex.practicum.service;
 
-import ru.yandex.practicum.dto.BookedProductsDto;
 import ru.yandex.practicum.dto.ChangeProductQuantityRequest;
 import ru.yandex.practicum.dto.ShoppingCartDto;
 

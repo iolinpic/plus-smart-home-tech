@@ -28,10 +28,6 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class WarehouseServiceImpl implements WarehouseService {
-    private final WarehouseRepository warehouseRepository;
-    private final WarehouseProductMapper warehouseProductMapper;
-    private final ShoppingStoreOperations shoppingStoreOperations;
-
     private static final AddressDto[] ADDRESSES =
             new AddressDto[]{
                     new AddressDto("ADDRESS_1",
@@ -44,7 +40,9 @@ public class WarehouseServiceImpl implements WarehouseService {
                             "ADDRESS_2",
                             "ADDRESS_2",
                             "ADDRESS_2")};
-
+    private final WarehouseRepository warehouseRepository;
+    private final WarehouseProductMapper warehouseProductMapper;
+    private final ShoppingStoreOperations shoppingStoreOperations;
 
     @Override
     @Transactional
