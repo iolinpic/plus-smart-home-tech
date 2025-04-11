@@ -26,13 +26,27 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AggregationStarter {
+    private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
     private final AggregatorConfig aggregatorConfig;
     private final KafkaConsumer<String, SensorEventAvro> consumer;
     private final KafkaProducer<String, SpecificRecordBase> producer;
-
     private final Map<String, SensorsSnapshotAvro> snapshots = new HashMap<>();
-    private static final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
 
+    private static void manageOffsets(ConsumerRecord<String, SensorEventAvro> record, int count,
+                                      KafkaConsumer<String, SensorEventAvro> consumer) {
+        currentOffsets.put(
+                new TopicPartition(record.topic(), record.partition()),
+                new OffsetAndMetadata(record.offset() + 1)
+        );
+
+        if (count % 10 == 0) {
+            consumer.commitAsync(currentOffsets, (offsets, exception) -> {
+                if (exception != null) {
+                    log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
+                }
+            });
+        }
+    }
 
     public void start() {
         try {
@@ -73,23 +87,6 @@ public class AggregationStarter {
         }
 
     }
-
-    private static void manageOffsets(ConsumerRecord<String, SensorEventAvro> record, int count,
-                                      KafkaConsumer<String, SensorEventAvro> consumer) {
-        currentOffsets.put(
-                new TopicPartition(record.topic(), record.partition()),
-                new OffsetAndMetadata(record.offset() + 1)
-        );
-
-        if (count % 10 == 0) {
-            consumer.commitAsync(currentOffsets, (offsets, exception) -> {
-                if (exception != null) {
-                    log.warn("Ошибка во время фиксации оффсетов: {}", offsets, exception);
-                }
-            });
-        }
-    }
-
 
     public Optional<SensorsSnapshotAvro> updateState(SensorEventAvro event) {
         SensorsSnapshotAvro snapshot;
