@@ -1,5 +1,6 @@
 package ru.yandex.practicum.feign;
 
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public interface DeliveryOperations {
 
     @PutMapping
-    DeliveryDto planDelivery(@RequestBody DeliveryDto newDelivery);
+    DeliveryDto planDelivery(@Valid @RequestBody DeliveryDto newDelivery);
 
     @PostMapping("/successful")
     void successful(@RequestBody UUID deliveryId);
@@ -25,6 +26,6 @@ public interface DeliveryOperations {
     void failed(@RequestBody UUID deliveryId);
 
     @PostMapping("/cost")
-    double deliveryCost(@RequestBody OrderDto orderDto);
+    double deliveryCost(@Valid @RequestBody OrderDto orderDto);
 
 }

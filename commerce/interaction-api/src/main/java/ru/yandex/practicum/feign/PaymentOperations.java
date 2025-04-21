@@ -1,5 +1,6 @@
 package ru.yandex.practicum.feign;
 
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,16 +13,16 @@ import java.util.UUID;
 public interface PaymentOperations {
 
     @PostMapping()
-    PaymentDto payment(@RequestBody OrderDto orderDto);
+    PaymentDto payment(@Valid @RequestBody OrderDto orderDto);
 
     @PostMapping("/totalCost")
-    double getTotalCost(@RequestBody OrderDto orderDto);
+    double getTotalCost(@Valid @RequestBody OrderDto orderDto);
 
     @PostMapping("/refund")
     void refund(@RequestBody UUID paymentId);
 
     @PostMapping("/productCost")
-    double productCost(@RequestBody OrderDto orderDto);
+    double productCost(@Valid @RequestBody OrderDto orderDto);
 
     @PostMapping("/failed")
     void failed(@RequestBody UUID paymentId);
