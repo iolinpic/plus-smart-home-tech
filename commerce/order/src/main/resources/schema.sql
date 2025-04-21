@@ -5,12 +5,12 @@ CREATE TABLE IF NOT EXISTS orders (
     payment_id UUID,
     delivery_id UUID,
     state VARCHAR NOT NULL,
-    delivery_weight DOUBLE,
-    delivery_volume DOUBLE,
+    delivery_weight DOUBLE PRECISION,
+    delivery_volume DOUBLE PRECISION,
     fragile BOOLEAN,
-    total_price DOUBLE,
-    delivery_price DOUBLE,
-    product_price DOUBLE
+    total_price DOUBLE PRECISION,
+    delivery_price DOUBLE PRECISION,
+    product_price DOUBLE PRECISION
 );
 
 CREATE TABLE IF NOT EXISTS order_products (
