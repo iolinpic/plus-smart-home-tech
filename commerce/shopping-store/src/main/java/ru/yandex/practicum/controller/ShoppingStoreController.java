@@ -35,7 +35,7 @@ public class ShoppingStoreController implements ShoppingStoreOperations {
     }
 
     @Override
-    public ProductDto getProductById(UUID productId) {
+    public ProductDto getProduct(UUID productId) {
         return shoppingService.findProductById(productId);
     }
 
