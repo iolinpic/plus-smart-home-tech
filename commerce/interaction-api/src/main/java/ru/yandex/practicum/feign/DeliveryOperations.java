@@ -7,22 +7,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.dto.DeliveryDto;
 import ru.yandex.practicum.dto.OrderDto;
 
+import java.util.UUID;
+
 @FeignClient(name = "delivery")
 public interface DeliveryOperations {
 
     @PutMapping
-    DeliveryDto create(@RequestBody DeliveryDto newDelivery);
+    DeliveryDto planDelivery(@RequestBody DeliveryDto newDelivery);
 
     @PostMapping("/successful")
-    void successful(@RequestBody String deliveryId);
+    void successful(@RequestBody UUID deliveryId);
 
     @PostMapping("/picked")
-    void picked(@RequestBody String deliveryId);
+    void picked(@RequestBody UUID deliveryId);
 
     @PostMapping("/failed")
-    void failed(@RequestBody String deliveryId);
+    void failed(@RequestBody UUID deliveryId);
 
     @PostMapping("/cost")
-    double cost(@RequestBody OrderDto orderDto);
+    double deliveryCost(@RequestBody OrderDto orderDto);
 
 }

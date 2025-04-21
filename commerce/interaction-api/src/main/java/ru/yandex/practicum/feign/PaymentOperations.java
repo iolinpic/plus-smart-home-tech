@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.dto.OrderDto;
 import ru.yandex.practicum.dto.PaymentDto;
 
+import java.util.UUID;
+
 @FeignClient(name = "payment")
 public interface PaymentOperations {
 
@@ -13,14 +15,14 @@ public interface PaymentOperations {
     PaymentDto payment(@RequestBody OrderDto orderDto);
 
     @PostMapping("/totalCost")
-    double totalCost(@RequestBody OrderDto orderDto);
+    double getTotalCost(@RequestBody OrderDto orderDto);
 
     @PostMapping("/refund")
-    void refund(@RequestBody String paymentId);
+    void refund(@RequestBody UUID paymentId);
 
     @PostMapping("/productCost")
     double productCost(@RequestBody OrderDto orderDto);
 
     @PostMapping("/failed")
-    void failed(@RequestBody String paymentId);
+    void failed(@RequestBody UUID paymentId);
 }

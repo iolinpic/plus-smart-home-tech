@@ -11,11 +11,14 @@ import ru.yandex.practicum.dto.CreateNewOrderRequest;
 import ru.yandex.practicum.dto.OrderDto;
 import ru.yandex.practicum.dto.ProductReturnRequest;
 
+import java.util.List;
+import java.util.UUID;
+
 @FeignClient(name = "order")
 public interface OrderOperations {
 
     @GetMapping
-    OrderDto get(@RequestParam String username);
+    List<OrderDto> get(@RequestParam String username);
 
     @PutMapping
     OrderDto create(@RequestBody CreateNewOrderRequest newOrder);
@@ -24,29 +27,29 @@ public interface OrderOperations {
     OrderDto returnOrder(@RequestParam ProductReturnRequest productReturnRequest);
 
     @PostMapping("/payment")
-    OrderDto payment(@RequestBody String orderId);
+    OrderDto paymentSuccess(@RequestBody UUID orderId);
 
     @PostMapping("/payment/failed")
-    OrderDto paymentFailed(@RequestBody String orderId);
+    OrderDto paymentFailed(@RequestBody UUID orderId);
 
     @PostMapping("/delivery")
-    OrderDto delivery(@RequestBody String orderId);
+    OrderDto delivery(@RequestBody UUID orderId);
 
     @PostMapping("/delivery/failed")
-    OrderDto deliveryFailed(@RequestBody String orderId);
+    OrderDto deliveryFailed(@RequestBody UUID orderId);
 
     @PostMapping("/completed")
-    OrderDto completed(@RequestBody String orderId);
+    OrderDto completed(@RequestBody UUID orderId);
 
     @PostMapping("/calculate/total")
-    OrderDto calculateTotal(@RequestBody String orderId);
+    OrderDto calculateTotal(@RequestBody UUID orderId);
 
     @PostMapping("/calculate/delivery")
-    OrderDto calculateDelivery(@RequestBody String orderId);
+    OrderDto calculateDelivery(@RequestBody UUID orderId);
 
     @PostMapping("/assembly")
-    OrderDto assembly(@RequestBody String orderId);
+    OrderDto assembly(@RequestBody UUID orderId);
 
     @PostMapping("/assembly/failed")
-    OrderDto assemblyFailed(@RequestBody String orderId);
+    OrderDto assemblyFailed(@RequestBody UUID orderId);
 }
