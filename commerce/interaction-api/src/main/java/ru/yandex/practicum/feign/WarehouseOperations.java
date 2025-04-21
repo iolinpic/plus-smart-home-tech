@@ -36,7 +36,7 @@ public interface WarehouseOperations {
     void shippedToDelivery(@Valid @RequestBody ShippedToDeliveryRequest shippedToDeliveryRequest);
 
     @PostMapping("/return")
-    void returnItem(@RequestBody Map<UUID,Integer> returnedItems);
+    void returnItem(@RequestBody Map<UUID, Integer> returnedItems);
 
     @PostMapping("/assembly")
     BookedProductsDto assemblyProductForOrderFromShoppingCart(@RequestBody AssemblyProductsForOrderRequest request);

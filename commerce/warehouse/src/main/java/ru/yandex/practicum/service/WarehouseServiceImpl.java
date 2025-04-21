@@ -120,7 +120,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             warehouseRepository.save(product);
             updateQuantityInShoppingStore(product);
         });
-        OrderBooking orderBooking = orderBookingMapper.mapToOrderBooking(bookedProductsParams,request);
+        OrderBooking orderBooking = orderBookingMapper.mapToOrderBooking(bookedProductsParams, request);
         orderBooking = orderBookingRepository.save(orderBooking);
         return orderBookingMapper.mapToBookingDto(orderBooking);
     }

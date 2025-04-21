@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeliveryDto    {
+public class DeliveryDto {
     private UUID deliveryId;
 
     @NotNull

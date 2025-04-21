@@ -13,6 +13,8 @@ public interface OrderBookingMapper {
     @Mapping(target = "deliveryVolume", source = "productsParams.deliveryVolume")
     @Mapping(target = "products", source = "request.products")
     @Mapping(target = "orderId", source = "request.orderId")
+    @Mapping(target = "bookingId", ignore = true)
+    @Mapping(target = "deliveryId", ignore = true)
     OrderBooking mapToOrderBooking(BookedProductsDto productsParams, AssemblyProductsForOrderRequest request);
 
     BookedProductsDto mapToBookingDto(OrderBooking booking);
